@@ -1,4 +1,3 @@
-echo '########## <updating and upgrade> ##########'
 sudo apt-get update 
 sudo dpkg --configure -a
 sudo apt-get upgrade -y
@@ -87,18 +86,20 @@ sudo curl -L "https://github.com/docker/compose/releases/download/1.25.5/docker-
 sudo chmod +x /usr/local/bin/docker-compose
 docker-compose --version
 
+echo '########## <installing Beekeeperstudio> ##########'
+# Install our GPG key
+wget --quiet -O - https://bintray.com/user/downloadSubjectPublicKey?username=bintray | sudo apt-key add -
+
+# add our repo to your apt lists directory
+echo "deb https://dl.bintray.com/beekeeper-studio/releases disco main" | sudo tee /etc/apt/sources.list.d/beekeeper-studio.list
+
+# Update apt and install
+sudo apt update
+sudo apt install beekeeper-studio
+
 echo '########## <installing ctop> ##########'
 sudo wget https://github.com/bcicen/ctop/releases/download/v0.7.3/ctop-0.7.3-linux-amd64 -O /usr/local/bin/ctop
 sudo chmod +x /usr/local/bin/ctop
-
-echo '########## <installing dbeaver> ##########'
-sudo apt install openjdk-11-jdk openjdk-11-jre -y -f
-java -version
-
-wget -c https://dbeaver.io/files/7.0.1/dbeaver-ce_7.0.1_amd64.deb
-sudo dpkg -i dbeaver-ce_7.0.1_amd64.deb
-sudo apt-get install -y -f
-rm -rf dbeaver-ce_7.0.1_amd64.deb
 
 echo '########## <installing spotify> ##########'
 sudo snap install spotify
@@ -127,31 +128,6 @@ chmod 700 get_helm.sh
 ./get_helm.sh
 helm version
 rm -rf get_helm.sh
-
-echo "########## <installing robo3t> ##########" 
-wget -c https://download-test.robomongo.org/linux/robo3t-1.3.1-linux-x86_64-7419c406.tar.gz
-sudo tar -xvzf robo3t-1.3.1-linux-x86_64-7419c406.tar.gz
-mkdir /usr/local/bin/robo3t
-sudo mv robo3t-1.3.1-linux-x86_64-7419c406/*  /usr/local/bin/robo3t
-rm -rf robo3t-1.3.1-linux-x86_64-7419c406.tar.gz
-rm -rf robo3t-1.3.1-linux-x86_64-7419c406
-sudo chmod +x -R /usr/local/bin/robo3t
-cd /usr/local/bin/robo3t/bin
-
-echo "########## <creating robo3t shortcut> ##########"
-wget -c https://dashboard.snapcraft.io/site_media/appmedia/2018/09/logo-256x256.png -O icon.png
-touch robo3t.desktop
-sudo echo "[Desktop Entry]
-Encoding=UTF-8
-Type=Application
-Name=Robo3t
-Icon=/usr/local/bin/robo3t/bin/icon.png
-Exec=\"/usr/local/bin/robo3t/bin/robo3t\"
-Comment=Robo3t 
-Categories=Development;
-Terminal=false
-StartupNotify=true" >> robo3t.desktop
-sudo mv robo3t.desktop /usr/share/applications/robo3t.desktop
 
 echo '########## <installing zsh> ##########'
 sudo apt-get install zsh -y
